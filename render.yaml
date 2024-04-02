@@ -1,0 +1,7 @@
+services:
+  # A Docker web service
+  - type: web
+    plan: starter
+    name: metabase-clickhouse
+    env: docker
+    branch: master

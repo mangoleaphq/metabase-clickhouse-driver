@@ -1,12 +1,13 @@
-# Use the base image for ClickHouse
-FROM clickhouse/clickhouse-server:24.1-alpine
+# Define the Metabase service
+FROM metabase/metabase:v0.49.0-RC2 as metabase
 
-# Set ulimits
-RUN ulimit -n 262144
+# Set environment variables for Metabase
+ENV MB_HTTP_TIMEOUT 5000
+ENV JAVA_TIMEZONE UTC
 
-# Copy ClickHouse configuration files
-COPY ./.docker/clickhouse/single_node/config.xml /etc/clickhouse-server/config.xml
-COPY ./.docker/clickhouse/single_node/users.xml /etc/clickhouse-server/users.xml
+# Expose ports for Metabase
+EXPOSE 3000
 
-# Expose ports for ClickHouse
-EXPOSE 8123 9000
+# Copy Metabase plugins
+# COPY ../../../resources/modules/clickhouse.metabase-driver.jar /plugins/clickhouse.jar
+# COPY ./.docker/clickhouse/single_node_tls/certificates/ca.crt /certs/ca.crt

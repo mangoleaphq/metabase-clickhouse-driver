@@ -31,7 +31,7 @@ ENV JAVA_TIMEZONE=UTC
 EXPOSE 3000
 
 # Copy necessary files for metabase service
-COPY ../../../resources/modules/clickhouse.metabase-driver.jar /plugins/clickhouse.jar
+COPY ../../resources/modules/clickhouse.metabase-driver.jar /plugins/clickhouse.jar
 COPY ./.docker/clickhouse/single_node_tls/certificates/ca.crt /certs/ca.crt
 
 # Start the services

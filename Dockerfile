@@ -48,5 +48,5 @@ ENV JAVA_TIMEZONE UTC
 EXPOSE 3000
 
 # Copy Metabase plugins
-COPY ../../../resources/modules/clickhouse.metabase-driver.jar /plugins/clickhouse.jar
-COPY ./.docker/clickhouse/single_node_tls/certificates/ca.crt /certs/ca.crt
+# COPY ../../../resources/modules/clickhouse.metabase-driver.jar /plugins/clickhouse.jar
+# COPY ./.docker/clickhouse/single_node_tls/certificates/ca.crt /certs/ca.crt

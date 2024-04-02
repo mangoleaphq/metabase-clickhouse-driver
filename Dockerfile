@@ -1,1 +1,1 @@
-docker-compose.cluster.yml v0.47.2 1.2.2 my-metabase-with-clickhouse:v0.0.1
+./build_docker_image.sh v0.47.2 1.2.2 my-metabase-with-clickhouse:v0.0.1

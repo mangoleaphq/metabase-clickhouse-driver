@@ -1,4 +1,25 @@
-docker run -v ./.docker/clickhouse/single_node/config.xml:/etc/clickhouse-server/config.xml -v ./.docker/clickhouse/single_node/users.xml:/etc/clickhouse-server/users.xml --ulimit nofile=262144:262144 --name metabase-driver-clickhouse-server -p 8123:8123 -p 9000:9000 clickhouse/clickhouse-server:24.1-alpine 
-docker run -v ./.docker/clickhouse/single_node/config.xml:/etc/clickhouse-server/config.xml -v ./.docker/clickhouse/single_node/users.xml:/etc/clickhouse-server/users.xml --ulimit nofile=262144:262144 --name metabase-driver-clickhouse-server-older-version -p 8124:8123 -p 9001:9000 clickhouse/clickhouse-server:23.3-alpine 
-docker run -v ./.docker/clickhouse/single_node_tls/config.xml:/etc/clickhouse-server/config.xml -v ./.docker/clickhouse/single_node_tls/users.xml:/etc/clickhouse-server/users.xml --ulimit nofile=262144:262144 --name metabase-driver-clickhouse-server-tls -h server.clickhouseconnect.test -p 8443:8443 -p 9440:9440 
-docker run -v ../../../resources/modules/clickhouse.metabase-driver.jar:/plugins/clickhouse.jar -v ./.docker/clickhouse/single_node_tls/certificates/ca.crt:/certs/ca.crt --name metabase-with-clickhouse-driver -p 3000:3000 -e MB_HTTP_TIMEOUT=5000 -e JAVA_TIMEZONE=UTC metabase/metabase:v0.49.0-RC2 
+# Use the clickhouse base image
+FROM clickhouse/clickhouse-server:24.1-alpine
+
+# Set ulimits
+RUN ulimit -n 262144
+
+# Copy configuration files
+COPY ./.docker/clickhouse/single_node/config.xml /etc/clickhouse-server/config.xml
+COPY ./.docker/clickhouse/single_node/users.xml /etc/clickhouse-server/users.xml
+
+# Expose ports
+EXPOSE 8123 9000
+
+# Use the clickhouse base image
+FROM clickhouse/clickhouse-server:23.3-alpine
+
+# Set ulimits
+RUN ulimit -n 262144
+
+# Copy configuration files
+COPY ./.docker/clickhouse/single_node/config.xml /etc/clickhouse-server/config.xml
+COPY ./.docker/clickhouse/single_node/users.xml /etc/clickhouse-server/users.xml
+
+# Expose ports
+EXPOSE 8124 9001

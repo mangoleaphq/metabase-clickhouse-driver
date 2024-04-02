@@ -1,72 +1,57 @@
 services:
   - name: clickhouse
-    env:
-      - key: CLICKHOUSE_CONFIG_FILE
-        value: /etc/clickhouse-server/config.xml
-      - key: CLICKHOUSE_USERS_FILE
-        value: /etc/clickhouse-server/users.xml
-    disk: 10
+    env: docker
+    image: clickhouse/clickhouse-server:24.1-alpine
     plan: starter
-    instanceType: web
-    environment:
-      - key: NOFILE_SOFT_LIMIT
-        value: '262144'
-      - key: NOFILE_HARD_LIMIT
-        value: '262144'
     ports:
       - 8123
       - 9000
+    environment:
+      - key: CLICKHOUSE_CONFIG
+        value: /etc/clickhouse-server/config.xml
+      - key: CLICKHOUSE_USERS
+        value: /etc/clickhouse-server/users.xml
 
   - name: clickhouse_older_version
-    env:
-      - key: CLICKHOUSE_CONFIG_FILE
-        value: /etc/clickhouse-server/config.xml
-      - key: CLICKHOUSE_USERS_FILE
-        value: /etc/clickhouse-server/users.xml
-    disk: 10
+    env: docker
+    image: clickhouse/clickhouse-server:23.3-alpine
     plan: starter
-    instanceType: web
-    environment:
-      - key: NOFILE_SOFT_LIMIT
-        value: '262144'
-      - key: NOFILE_HARD_LIMIT
-        value: '262144'
     ports:
       - 8124
       - 9001
+    environment:
+      - key: CLICKHOUSE_CONFIG
+        value: /etc/clickhouse-server/config.xml
+      - key: CLICKHOUSE_USERS
+        value: /etc/clickhouse-server/users.xml
 
   - name: clickhouse_tls
-    env:
-      - key: CLICKHOUSE_CONFIG_FILE
-        value: /etc/clickhouse-server/config.xml
-      - key: CLICKHOUSE_USERS_FILE
-        value: /etc/clickhouse-server/users.xml
-    disk: 10
+    env: docker
+    build:
+      - context: ./
+      - dockerfile: .docker/clickhouse/single_node_tls/Dockerfile
     plan: starter
-    instanceType: web
-    environment:
-      - key: NOFILE_SOFT_LIMIT
-        value: '262144'
-      - key: NOFILE_HARD_LIMIT
-        value: '262144'
     ports:
       - 8443
       - 9440
+    environment:
+      - key: CLICKHOUSE_CONFIG
+        value: /etc/clickhouse-server/config.xml
+      - key: CLICKHOUSE_USERS
+        value: /etc/clickhouse-server/users.xml
+    hostname: server.clickhouseconnect.test
 
   - name: metabase
+    env: docker
     image: metabase/metabase:v0.49.0-RC2
-    env:
-      - key: MB_HTTP_TIMEOUT
-        value: '5000'
-      - key: JAVA_TIMEZONE
-        value: UTC
-    disk: 10
     plan: starter
-    instanceType: web
+    ports:
+      - 3000
     environment:
       - key: MB_HTTP_TIMEOUT
         value: '5000'
       - key: JAVA_TIMEZONE
         value: UTC
-    ports:
-      - 3000
+    volumes:
+      - ../../../resources/modules/clickhouse.metabase-driver.jar:/plugins/clickhouse.jar
+      - ./.docker/clickhouse/single_node_tls/certificates/ca.crt:/certs/ca.crt

@@ -6,7 +6,8 @@ ENV MB_DB_DBNAME=gbx_workflow_db
 ENV MB_DB_PORT=5432
 ENV MB_DB_USER=gbx_workflow_db_user
 ENV MB_DB_PASS=pk3dm3vXFKm39TiiYLCaG2WI5SKQaVCB
-ENV MB_DB_HOST=dpg-c5a663cobjd8sg6lcvkgt
+ENV MB_DB_HOST=dpg-c5a663cobjd8sg6lcvkg.oregon-postgres.render.com
+
 
 # Set environment variables for Metabase
 ENV MB_HTTP_TIMEOUT 5000

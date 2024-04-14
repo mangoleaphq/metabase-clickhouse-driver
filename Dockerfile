@@ -1,16 +1,9 @@
-FROM metabase/metabase:v0.41.3
+# Define the Metabase service
+FROM metabase/metabase:v0.49.0-RC2 as metabase
 
-# Create a new user and group for Metabase
-RUN groupadd -r metabase && useradd -r -g metabase metabase
+# Set environment variables for Metabase
+ENV MB_HTTP_TIMEOUT 5000
+ENV JAVA_TIMEZONE UTC
 
-# Change ownership of the Metabase directory to the new user
-RUN chown -R metabase:metabase /metabase
-
-# Add any custom plugins here
-# RUN mkdir -p /plugins && \
-#     wget -P /plugins https://github.com/metabase/custom-plugin/releases/download/v1.0.0/custom-plugin.jar
-
+# Expose ports for Metabase
 EXPOSE 3000
-
-USER metabase
-CMD ["java", "-jar", "metabase.jar"]

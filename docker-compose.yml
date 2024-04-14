@@ -52,7 +52,72 @@ services:
     environment:
       'MB_HTTP_TIMEOUT': '5000'
       'JAVA_TIMEZONE': 'UTC'
-      'MB_DB_TYPE': 'postgres'
+      'MB_version: "3.8"
+services:
+    clickhouse:
+        image: "clickhouse/clickhouse-server:24.1-alpine"
+        container_name: "metabase-driver-clickhouse-server"
+        ports:
+            - "8123:8123"
+            - "9000:9000"
+        ulimits:
+            nofile:
+                soft: 262144
+                hard: 262144
+        volumes:
+            - "./.docker/clickhouse/single_node/config.xml:/etc/clickhouse-server/config.xml"
+            - "./.docker/clickhouse/single_node/users.xml:/etc/clickhouse-server/users.xml"
+
+    # For testing pre-23.8 string functions switch between UTF8 and non-UTF8 versions (see clickhouse_qp.clj)
+    clickhouse_older_version:
+        image: "clickhouse/clickhouse-server:23.3-alpine"
+        container_name: "metabase-driver-clickhouse-server-older-version"
+        ports:
+            - "8124:8123"
+            - "9001:9000"
+        ulimits:
+            nofile:
+                soft: 262144
+                hard: 262144
+        volumes:
+            - "./.docker/clickhouse/single_node/config.xml:/etc/clickhouse-server/config.xml"
+            - "./.docker/clickhouse/single_node/users.xml:/etc/clickhouse-server/users.xml"
+
+    clickhouse_tls:
+        build:
+            context: ./
+            dockerfile: .docker/clickhouse/single_node_tls/Dockerfile
+        container_name: "metabase-driver-clickhouse-server-tls"
+        ports:
+            - "8443:8443"
+            - "9440:9440"
+        ulimits:
+            nofile:
+                soft: 262144
+                hard: 262144
+        volumes:
+            - "./.docker/clickhouse/single_node_tls/config.xml:/etc/clickhouse-server/config.xml"
+            - "./.docker/clickhouse/single_node_tls/users.xml:/etc/clickhouse-server/users.xml"
+        hostname: server.clickhouseconnect.test
+
+    metabase:
+        image: metabase/metabase:v0.49.0-RC2
+        container_name: metabase-with-clickhouse-driver
+        environment:
+            "MB_HTTP_TIMEOUT": "5000"
+            "JAVA_TIMEZONE": "UTC"
+            "MB_DB_TYPE": "postgres"
+            "MB_DB_DBNAME": "gbx_workflow_db"
+            "MB_DB_PORT": "5432"
+            "MB_DB_USER": "gbx_workflow_db_user"
+            "MB_DB_PASS": "pk3dm3vXFKm39TiiYLCaG2WI5SKQaVCB"
+            "MB_DB_HOST": "dpg-c5a663cobjd8sg6lcvkgt"
+        ports:
+            - "3000:3000"
+        volumes:
+            - "../../../resources/modules/clickhouse.metabase-driver.jar:/plugins/clickhouse.jar"
+            - "./.docker/clickhouse/single_node_tls/certificates/ca.crt:/certs/ca.crt"
+DB_TYPE': 'postgres'
       'MB_DB_DBNAME: 'gbx_workflow_db'
       'MB_DB_PORT: '5432'
       'MB_DB_USER: 'gbx_workflow_db_user'

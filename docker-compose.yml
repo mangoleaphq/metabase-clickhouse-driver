@@ -52,6 +52,12 @@ services:
     environment:
       'MB_HTTP_TIMEOUT': '5000'
       'JAVA_TIMEZONE': 'UTC'
+      'MB_DB_TYPE': 'postgres'
+      'MB_DB_DBNAME: 'gbx_workflow_db'
+      'MB_DB_PORT: '5432'
+      'MB_DB_USER: 'gbx_workflow_db_user'
+      'MB_DB_PASS: 'pk3dm3vXFKm39TiiYLCaG2WI5SKQaVCB'
+      'MB_DB_HOST: 'dpg-c5a663cobjd8sg6lcvkgt'
     ports:
       - '3000:3000'
     volumes:

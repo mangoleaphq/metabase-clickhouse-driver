@@ -3,7 +3,7 @@ FROM metabase/metabase:latest
 
 # Install the ClickHouse driver
 RUN mkdir -p /opt/metabase/plugins && \
-    wget -P /opt/metabase/plugins https://github.com/metabase/clickhouse-driver/releases/download/v1.2.2/clickhouse-driver-1.2.2.jar
+    wget -P /opt/metabase/plugins https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/$METABASE_CLICKHOUSE_DRIVER_VERSION/clickhouse.metabase-driver.jar
 
 # Set the environment variables for the PostgreSQL database
 ENV MB_DB_TYPE=postgres

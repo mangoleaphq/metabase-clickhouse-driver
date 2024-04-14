@@ -5,7 +5,7 @@ ENV MB_DB_CONNECTION_URI=postgres://gbx_workflow_db_user:pk3dm3vXFKm39TiiYLCaG2W
 
 # Create a 'plugins' directory and download the ClickHouse driver
 RUN mkdir -p plugins && \
-    curl -L -o plugins/clickhouse.metabase-driver.jar https://github.com/ClickHouse/metabase-clickhouse-driver/releases/download/$METABASE_CLICKHOUSE_DRIVER_VERSION/clickhouse.metabase-driver.jar
+    curl -L -o plugins/clickhouse.metabase-driver.jar download/1.4.0/clickhouse.metabase-driver.jar
 
 RUN cd plugins
 

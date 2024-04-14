@@ -1,12 +1,7 @@
 # Define the Metabase service
 FROM metabase/metabase:v0.49.0-RC2 as metabase
 
-ENV MB_DB_TYPE=postgres
-ENV MB_DB_DBNAME=gbx_workflow_db
-ENV MB_DB_PORT=5432
-ENV MB_DB_USER=gbx_workflow_db_user
-ENV MB_DB_PASS=pk3dm3vXFKm39TiiYLCaG2WI5SKQaVCB
-ENV MB_DB_HOST=dpg-c5a663cobjd8sg6lcvkg.oregon-postgres.render.com
+ENV MB_DB_CONNECTION_URI=postgres://gbx_workflow_db_user:pk3dm3vXFKm39TiiYLCaG2WI5SKQaVCB@dpg-c5a663cobjd8sg6lcvkg.oregon-postgres.render.com/gbx_workflow_db
 
 
 # Set environment variables for Metabase
